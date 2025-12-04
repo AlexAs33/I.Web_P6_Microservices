@@ -99,18 +99,23 @@ Answer the following questions:
 
 ### Initial Failure
 
-![Error Screenshot](docs/screenshots/failure-error.png)
+![Error Screenshot](docs/screenshots/failure-error.jpg)
 
-Describe what happens immediately after stopping the accounts service on port 3333.
+**Describe what happens immediately after stopping the accounts service on port 3333:**
+Cuando se elimina la account del puerto 3333 la mitad de las peticiones mustran un error como el de la imagen. Ya que las peticiones al account del puerto 2222 siguen funcionando. El servicio web tiene en su cache que la account 3333 esta en estado UP.
 
 ### Eureka Instance Removal
 
 ![Instance Removal](docs/screenshots/instance-removal.png)
 
+> Esta captura ha sido tomada en un entorno linux. Debido a que me di cuenta de que habia que tomarla una vez habia terminado. Y al montar de nuevo el entorno en windows vi que esta captura era imposible de tomar.
+
 Explain how Eureka detects and removes the failed instance:
 
-- How long did it take for Eureka to remove the dead instance?
-- What mechanism does Eureka use to detect failures?
+- **How long did it take for Eureka to remove the dead instance?**
+Cuando presionamos cointrol C ya esta en estado DOWN para ser retirada a los pocos segundos.
+- **What mechanism does Eureka use to detect failures?**
+El heartbeat de Eureka es de 30s. Pasado ese tiempo detecta la caida. Posteriormente el servicio web actualiza su cache y deja de enviar peticiones a 3333.
 
 ---
 
@@ -120,31 +125,27 @@ Explain how Eureka detects and removes the failed instance:
 
 Answer the following questions:
 
-- Why does the web service eventually recover?
-- How long did recovery take?
-- What role does client-side caching play in the recovery process?
+- **Why does the web service eventually recover?** Después de detectar el fallo eureka elimina la account caída de su registro. Así cuando el servicio web actualiza la cache desaparece de la página.
+- **How long did recovery take?** 2'50" hasta que se recupera completamente
+- **What role does client-side caching play in the recovery process?** Al no consultar Eureka para cada petición se reduce la carga en este servidor.
 
 ---
 
 ## 7. Conclusions
 
-Summarize what you learned about:
+Esta sesión de laboratorio ha sido muy útil para comprender cómo funciona una arquitectura de microservicios y cómo se establece la comunicación entre ellos.
 
-- Microservices architecture
-- Service discovery with Eureka
-- System resilience and self-healing
-- Challenges you encountered and how you solved them
+La práctica también ha permitido aplicar los conocimientos adquiridos en la asignatura de Sistemas Distribuidos, observando cómo el cliente distribuye automáticamente el tráfico entre múltiples instancias y cómo el sistema se recupera de fallos de manera automática mediante el mecanismo de heartbeats. En esta asignatura se estudió el algoritmo Raft, que también utiliza heartbeats para detectar fallos en las instancias, lo que ayudó a relacionar la teoría con la práctica.
+
+Asimismo, se ha comprendido la importancia de contar con un Config Server, ya que centraliza y simplifica la gestión de la configuración de todo el sistema.
+
+Uno de los mayores desafíos de esta práctica fue entender la arquitectura y el funcionamiento de la comunicación entre microservicios. Sin embargo, una vez superada esta parte, el resto de la práctica se pudo completar sin dificultad.
 
 ---
 
 ## 8. AI Disclosure
 
-**Did you use AI tools?** (ChatGPT, Copilot, Claude, etc.)
-
-- If YES: Which tools? What did they help with? What did you do yourself?
-- If NO: Write "No AI tools were used."
-
-**Important**: Explain your own understanding of microservices patterns and Eureka behavior, even if AI helped you write parts of this report.
+**Did you use AI tools?** No he empleado niinguna inteligencia artificial para la realización de la práctica. Los pasos a realizar en cada Task eran muy claros y concisos. ünicamente he utilizado chat gpt para que reescribiese textos de este report.
 
 ---
 
